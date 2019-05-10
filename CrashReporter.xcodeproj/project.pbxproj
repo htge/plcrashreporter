@@ -856,6 +856,7 @@
 		2D0E104C1141F7DC00CE1BD6 /* PLCrashReportProcessInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D0E10441141F7DC00CE1BD6 /* PLCrashReportProcessInfo.h */; };
 		2D0E104D1141F7DC00CE1BD6 /* PLCrashReportProcessInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0E10451141F7DC00CE1BD6 /* PLCrashReportProcessInfo.m */; };
 		2D0E104E1141F7DC00CE1BD6 /* PLCrashReportProcessInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D0E10441141F7DC00CE1BD6 /* PLCrashReportProcessInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8663FDCF228566CD0019EC40 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8663FDCE228566CD0019EC40 /* libc++.tbd */; };
 		C21688F916445344000F90ED /* PLCrashAsyncMachOStringTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C21688F816445344000F90ED /* PLCrashAsyncMachOStringTests.m */; };
 		C21688FA16445344000F90ED /* PLCrashAsyncMachOStringTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C21688F816445344000F90ED /* PLCrashAsyncMachOStringTests.m */; };
 		C21688FB16445344000F90ED /* PLCrashAsyncMachOStringTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C21688F816445344000F90ED /* PLCrashAsyncMachOStringTests.m */; };
@@ -1443,6 +1444,7 @@
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		2D0E10441141F7DC00CE1BD6 /* PLCrashReportProcessInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCrashReportProcessInfo.h; sourceTree = "<group>"; };
 		2D0E10451141F7DC00CE1BD6 /* PLCrashReportProcessInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLCrashReportProcessInfo.m; sourceTree = "<group>"; };
+		8663FDCE228566CD0019EC40 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* CrashReporter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CrashReporter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C21688F816445344000F90ED /* PLCrashAsyncMachOStringTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLCrashAsyncMachOStringTests.m; sourceTree = "<group>"; };
@@ -1557,6 +1559,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8663FDCF228566CD0019EC40 /* libc++.tbd in Frameworks */,
 				05CD32110EE93AF9000FDE88 /* Foundation.framework in Frameworks */,
 				05654F770EFA5B54004283F5 /* CoreServices.framework in Frameworks */,
 			);
@@ -2238,6 +2241,7 @@
 				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
 				034768DFFF38A50411DB9C8B /* Products */,
 				059670E30EEFADA6008A0601 /* Dependencies */,
+				8663FDCD228566CC0019EC40 /* Frameworks */,
 			);
 			indentWidth = 4;
 			name = CrashReporter;
@@ -2317,6 +2321,14 @@
 				05614E111A965A6100D62442 /* SenTestCompat.h */,
 			);
 			path = "Other Sources";
+			sourceTree = "<group>";
+		};
+		8663FDCD228566CC0019EC40 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8663FDCE228566CD0019EC40 /* libc++.tbd */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		FCE4576E42A51370AD81A734 /* Stack Frame Unwind */ = {
@@ -4432,7 +4444,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LIBRARY = "libc++";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				EFFECTIVE_PLATFORM_NAME = "-MacOSX";
@@ -4454,6 +4467,15 @@
 				PRODUCT_NAME = "CrashReporter$(EFFECTIVE_PLATFORM_NAME)-Static";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wno-shorten-64-to-32",
+					"-Wimport-preprocessor-directive-pedantic",
+					"-Wimplicit-fallthrough",
+					"-Wreceiver-forward-class",
+					"-Wshift-sign-overflow",
+					"$(PL_NEVER_WARN)",
+				);
 			};
 			name = Debug;
 		};
@@ -4461,7 +4483,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LIBRARY = "libc++";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -4482,6 +4505,15 @@
 				PRODUCT_NAME = "CrashReporter$(EFFECTIVE_PLATFORM_NAME)-Static";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wno-shorten-64-to-32",
+					"-Wimport-preprocessor-directive-pedantic",
+					"-Wimplicit-fallthrough",
+					"-Wreceiver-forward-class",
+					"-Wshift-sign-overflow",
+					"$(PL_NEVER_WARN)",
+				);
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -4544,7 +4576,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LIBRARY = "libc++";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -4566,6 +4599,15 @@
 				PRODUCT_NAME = CrashReporter;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wno-shorten-64-to-32",
+					"-Wimport-preprocessor-directive-pedantic",
+					"-Wimplicit-fallthrough",
+					"-Wreceiver-forward-class",
+					"-Wshift-sign-overflow",
+					"$(PL_NEVER_WARN)",
+				);
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -4574,7 +4616,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LIBRARY = "libc++";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -4593,6 +4636,15 @@
 				PRODUCT_NAME = CrashReporter;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-Wno-shorten-64-to-32",
+					"-Wimport-preprocessor-directive-pedantic",
+					"-Wimplicit-fallthrough",
+					"-Wreceiver-forward-class",
+					"-Wshift-sign-overflow",
+					"$(PL_NEVER_WARN)",
+				);
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
@@ -4613,7 +4665,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_SHADOW = YES;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/Dependencies/protobuf-2.0.3/include\"";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"$(inherited)",
@@ -4659,7 +4711,7 @@
 					"\"$(SRCROOT)/$(DERIVED_FILES_DIR)\"",
 					"\"$(SRCROOT)/Dependencies/protobuf-2.0.3/include\"",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-D$(PL_BUILD_CONFIG_FLAG)=1",
